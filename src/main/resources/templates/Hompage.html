@@ -293,7 +293,7 @@
     function getList(city){
       return `<tr>`+
       `<td>${city.id}</td>`+
-    `  <td><a href="#">${city.name}</a></td>`+
+    `  <td><a href="#detailEmployeeModal" data-toggle="modal" onclick="showFormDetail(${city.id})">${city.name}</a></td>`+
     `  <td>${city.national}</td>`+
     `  <td>`+
     `    <a href="#editEmployeeModal" onclick="showFormUpdate(${city.id})" class="edit" data-toggle="modal"><i class="material-icons"`+
@@ -307,7 +307,6 @@
     }
 
     function showFormUpdate(id){
-      console.log("hello")
 
       $.ajax({
         type:"GET",
@@ -324,8 +323,25 @@
         }
       })
     }
+    function showFormDetail(id){
+
+      $.ajax({
+        type:"GET",
+        url:`http://localhost:8080/city/${id}`,
+        success:function (data){
+          console.log(data)
+          $('.id-detail').val(`${id}`)  ;
+          $('.name-detail').val(`${data.name}`)  ;
+          $('.national-detail').val(`${data.national}`) ;
+          $('.area-detail').val(`${data.area}`) ;
+          $('.population-detail').val(`${data.population}`) ;
+          $('.dicription-detail').val(`${data.dicription}`) ;
+          $('.gdp-detail').val(`${data.gdp}`) ;
+        }
+      })
+    }
     function showForDelete(id){
-      $('.id-delete').val(`${id}`) ;
+       $('.id-delete').val(`${id}`) ;
       console.log(id)
     }
 
@@ -394,9 +410,10 @@
 
     function deleteCity(){
       let id = $('.id-delete').val()  ;
+      console.log(id)
       $.ajax({
         type:"DELETE",
-        url:`http://localhost:8080/api/comments/${id}`,
+        url:`http://localhost:8080/city/${id}`,
         success:function (){
          listCity();
         }
@@ -528,6 +545,52 @@
         <div class="modal-footer">
           <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
           <input type="submit" class="btn btn-success" value="Update" onclick="updateCity()">
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Detail Modal HTML -->
+<div id="detailEmployeeModal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form>
+        <div class="modal-header">
+          <h4 class="modal-title">Detail City</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <input type="hidden" class="form-control id-detail" disabled>
+          </div>
+          <div class="form-group">
+            <label >City</label>
+            <input type="text" class="form-control name-detail" disabled>
+          </div>
+          <div class="form-group">
+            <label >National</label>
+            <input type="text" class="form-control national-detail" disabled>
+          </div>
+          <div class="form-group">
+            <label >Area</label>
+            <input type="text" class="form-control area-detail" disabled>
+          </div>
+
+          <div class="form-group">
+            <label >Population</label>
+            <input type="text" class="form-control population-detail" disabled>
+          </div>
+          <div class="form-group">
+            <label>GDP</label>
+            <input type="text" class="form-control gdp-detail" disabled>
+          </div>
+          <div class="form-group">
+            <label >Dicription</label>
+            <textarea class="form-control dicription-detail" disabled></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
         </div>
       </form>
     </div>
